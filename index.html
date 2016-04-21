@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta charset="utf-8">
+      <title>SHA512</title>
+      <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
+      <meta name="apple-mobile-web-app-capable" content="yes">
+      <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+      <script src="https://code.jquery.com/jquery-1.12.3.min.js"   integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ="   crossorigin="anonymous"></script>
+
+      <script>
+        $(document).ready(function () {
+
+          var pass = "I9hAve1tHeBest4Passwort";
+          $("#password0").html(pass);
+
+          var salt = "s61iaW4i2T3upLjsuRaMkXgFJH185qGi0dzUkV2TZI2JOcwAqdVHVEcsKk5TCB9guyCuCefqiga5oFGVqGiElngoGojGPmrzVM09kVctF9p8XzrbtNNKBDJkKZOmPuUMkPJ2GlDFecJ15Rpfwyvs4u6trO8qvJyQYSG4xM0BnBI2P7dnBtdw3XfjU9f8gZbGx3mtoS2OJaGLEsqdUYmExGolmCMPkfl8fncgRGjk3KAtGcLX14HimPDQukQNgEwYrjwUOSHUYig40s0qxnBgS6owRJKFvKfQkeSasVnBnotxCvXnzKRxdLQlhTAWOifEiHXjrfq5Nyo0GMELJUqnPRGftLgsBKSDxIzcwnq66V2jC2y1I5zgGyeXRc1mhT161hZL8vTYF5DBlzLpMGA28InAnHwRQv2CRnIMipjrhjJhr2wMQ8rkqIZ7QjCR553GW2feNTosnK0zTlBrDdzHuRrP9YcevKGtThrobOFEwX3rsIhb7C0bS8dhkAm8ez1K";
+
+          $("#password1").html("<span style='color: #fff'>" + pass + "</span>" + salt);
+
+          $("#encrypt").off('click').on('click', function (event) {
+
+            $("#encrypt").on('click', function () {
+              window.location.reload()
+            })
+
+            event.preventDefault();
+
+            $("#s1").css('display', 'inline');
+
+            setTimeout(function () {
+              $("#s1").css('display', 'none');
+              $("#s2").css('display', 'inline');
+              setTimeout(function () {
+                $("#s2").css('display', 'none');
+                $("#s3").css('display', 'inline');
+                loop();
+              }, 4000);
+            }, 3000);
+
+            //loop();
+          });
+
+          String.prototype.replaceAt=function(index, character) {
+            return this.substr(0, index) + character + this.substr(index+character.length);
+          }
+
+          function randomChar() {
+            var text = "";
+            var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            for( var i=0; i < 1; i++ ) {
+              text += possible.charAt(Math.floor(Math.random() * possible.length));
+            }
+            return text;
+          }
+
+          var i = 1;
+          var passSalt = pass + salt;
+
+          function loop () {
+
+             setTimeout(function () {
+
+                if (passSalt.length > 128) {
+                  passSalt = passSalt.substring(2, passSalt.length);
+                }
+                var rnd = Math.floor((Math.random() * passSalt.length) + 1);
+                var char = randomChar();
+                passSalt = passSalt.replaceAt(rnd, char);
+                $("#password").html(passSalt);
+                i++;
+                if (i < 300) {
+                   loop();
+                }
+             }, 1)
+          }
+
+          $("#encrypt").trigger('click');
+
+      }); /* jQuery ends */
+
+      </script>
+
+  </head>
+  <body style="text-align: center; background-color: black; color: #080; margin-top: 100px; ">
+    <a id="encrypt" href="#" style="position: absolute; top: 10px; left: 10px; color: #fff;">Start</a>
+
+    <div id="s1" style="display: none">
+      <span style="color: #fff;">Original password:</span><br />
+      <div id="password0" style="width: 200px; text-align: center; margin-left: auto; margin-right: auto;  word-wrap: break-word;">
+      </div>
+      <br /><br />
+    </div>
+
+    <div id="s2" style="display: none;">
+      <span style="color: #fff;">Add <i>salt</i>, or cryptographically securely generated hash:</span><br />
+      <br >
+      <div id="password1" style="width: 500px; text-align: center; margin-left: auto; margin-right: auto;  word-wrap: break-word;">
+      </div>
+    </div>
+
+    <div id="s3" style="display: none;">
+      <span style="color: #fff;">Encrypt salt and password with SHA512 algorithm:<br />
+      <div id="password0" style="width: 200px; text-align: center; margin-left: auto; margin-right: auto;  word-wrap: break-word;">
+      </div>
+      <br /><br />
+      <div id="password" style="width: 500px; text-align: center; margin-left: auto; margin-right: auto;  word-wrap: break-word; color: #080;">
+      </div>
+    </div>
+  </body>
+</html>
